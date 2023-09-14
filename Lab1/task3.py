@@ -1,23 +1,28 @@
-from task2 import get_questions_and_answers
+from task2 import get_questions_and_answers, create_tree
 import networkx as nx
 from matplotlib import pyplot as plt
 
 
 def hierarchy_tree_pos(g: nx.DiGraph, root: str, width: int = 100, pos: dict = {}, 
-                       xcenter=0, ycenter=0, ydist=0.01, n_iter=0):
+                       xcenter=0, ycenter=0, ydist=0.1, n_iter=0, rows_to_not_expand=[],
+                       expand_value=3.5):
+    """Рекурсивная функция, которая располагает узлы дерева так, чтобы получилась
+    иерархическая структура"""
     pos[root] = (xcenter, ycenter)
     neigh = list(g.neighbors(root))
     if len(neigh) != 0:
-        k = 1000000000000000000
-        dx = width / (len(neigh) - n_iter // k)
-        nextx = xcenter - width/(2 - n_iter // k) - dx/2
+        k = expand_value if n_iter not in rows_to_not_expand else 10**9
+        dx = width / (max(1, len(neigh) - n_iter // k))
+        nextx = xcenter - width/(max(1, 2 - n_iter // k)) - dx/2
         for node in neigh:
             nextx += dx
-            pos = hierarchy_tree_pos(g, node, dx, pos, nextx, ycenter-ydist, ydist,n_iter + 1)
+            pos = hierarchy_tree_pos(g, node, dx, pos, nextx, ycenter - ydist, 
+                                     ydist, n_iter + 1, rows_to_not_expand, expand_value)
     return pos
 
 
 def format_q(q: str, row_len=15) -> str:
+    """Переносит текст по строкам, чтобы длина каждой строки была не больше row_len"""
     if len(q) <= row_len:
         return q
     new_q = ""
@@ -32,17 +37,8 @@ def format_q(q: str, row_len=15) -> str:
     return new_q
 
 
-def find_person(v: str) -> int:
-    name = None
-    c = 0
-    for i, j in people.items():
-        if j.startswith(v):
-            c += 1
-            name = i
-    return c, name
-
-
-def create_graph(qnumber: int, prev: str):
+def create_graph(qnumber: int, prev: str, tree: tuple):
+    """Создает граф для отображения"""
     if qnumber == len(fields):
         return
     for i in (1, 0):
@@ -50,27 +46,28 @@ def create_graph(qnumber: int, prev: str):
         g.add_node(v)
         g.add_edge(prev, v, width=3)
         edge_labels[(prev, v)] = "Да" if i == 1 else "Нет"
-        c, name = find_person(v)
-        if c > 1:
-            label_dict[v] = format_q(fields[qnumber])
-            create_graph(qnumber + 1, v)
-        elif c == 1:
-            label_dict[v] = format_q(f"Вы - \n{name}")
+        new_tree = tree[i]
+        if isinstance(new_tree, str):
+            new_tree = "\n".join(new_tree.split())
+            label_dict[v] = new_tree
         else:
-            label_dict[v] = "Такого человека нет!"
+            label_dict[v] = format_q(fields[qnumber])
+            create_graph(qnumber + 1, v, new_tree)
 
 
 if __name__ == "__main__":
     fields, answers = get_questions_and_answers("opros.csv")
-    people = {i.person: str(i) for i in answers}
+    tree = create_tree(0, answers)
     g = nx.DiGraph()
     label_dict = {"": fields[0]}
     edge_labels = {}
     g.add_node("")
-    create_graph(1, "")
+    create_graph(1, "", tree)
+    plt.figure(figsize=(12, 5))
 
-    pos = hierarchy_tree_pos(g, "", width=3)
-    nx.draw(g, pos=pos, labels=label_dict, with_labels=True, font_size=5, node_color="white", width=0.5,
-            arrowsize=5, node_size=500)
-    nx.draw_networkx_edge_labels(g, pos, edge_labels=edge_labels, font_size=5)
-    plt.show()
+    pos = hierarchy_tree_pos(g, "", rows_to_not_expand=[4])
+    nx.draw(g, pos=pos, labels=label_dict, with_labels=True, font_size=4, node_color="white", width=0.5,
+            arrowsize=5, node_size=1000)
+    nx.draw_networkx_edge_labels(g, pos, edge_labels=edge_labels, font_size=4)
+    plt.savefig("Lab1/graph.pdf")
+    # plt.show()
