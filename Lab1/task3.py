@@ -21,7 +21,7 @@ def hierarchy_tree_pos(g: nx.DiGraph, root: str, width: int = 100, pos: dict = {
     return pos
 
 
-def wrap_text(text: str, row_len=20) -> str:
+def wrap_text(text: str, row_len=15) -> str:
     """Переносит текст по строкам, чтобы длина каждой строки была не больше row_len"""
     if len(text) <= row_len:
         return text
