@@ -21,20 +21,20 @@ def hierarchy_tree_pos(g: nx.DiGraph, root: str, width: int = 100, pos: dict = {
     return pos
 
 
-def format_q(q: str, row_len=15) -> str:
+def wrap_text(text: str, row_len=20) -> str:
     """Переносит текст по строкам, чтобы длина каждой строки была не больше row_len"""
-    if len(q) <= row_len:
-        return q
-    new_q = ""
-    c = 0
-    for i in q.split():
-        if c + len(i) + 1 <= row_len:
-            new_q += i + " "
-            c += len(i) + 1
+    if len(text) <= row_len:
+        return text
+    new_text = ""
+    current_row_len = 0
+    for word in text.split():
+        if current_row_len + len(word) + 1 <= row_len:
+            new_text += word + " "
+            current_row_len += len(word) + 1
         else:
-            new_q += "\n" + i + " "
-            c = 0
-    return new_q
+            new_text += "\n" + word + " "
+            current_row_len = len(word) + 1
+    return new_text
 
 
 def create_graph(qnumber: int, prev: str, tree: tuple):
@@ -51,20 +51,22 @@ def create_graph(qnumber: int, prev: str, tree: tuple):
             new_tree = "\n".join(new_tree.split())
             label_dict[v] = new_tree
         else:
-            label_dict[v] = format_q(fields[qnumber])
+            label_dict[v] = wrap_text(fields[qnumber])
             create_graph(qnumber + 1, v, new_tree)
 
 
 if __name__ == "__main__":
     fields, answers = get_questions_and_answers("opros.csv")
     tree = create_tree(0, answers)
-    g = nx.DiGraph()
+
     label_dict = {"": fields[0]}
     edge_labels = {}
+
+    g = nx.DiGraph()
     g.add_node("")
     create_graph(1, "", tree)
-    plt.figure(figsize=(12, 5))
 
+    plt.figure(figsize=(12, 5))
     pos = hierarchy_tree_pos(g, "", rows_to_not_expand=[4])
     nx.draw(g, pos=pos, labels=label_dict, with_labels=True, font_size=4, node_color="white", width=0.5,
             arrowsize=5, node_size=1000)

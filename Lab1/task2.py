@@ -1,22 +1,19 @@
 import csv
-import os
-
-
-path = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
     
 
 def create_ankets(data) -> list[tuple[str, list[int]]]:
     """Возвращает анкеты"""
     ankets = []
+    ankets = {}
     for i in data:
         _, person, *answers = i
-        ankets.append((person, [1 if x == "Да" else 0 for x in answers]))
+        ankets[person] = [1 if x == "Да" else 0 for x in answers]
     return ankets
 
 
 def get_questions_and_answers(filename: str) -> (list[str], list[tuple[str, list[int]]]):
     """Получение данных из csv-таблицы с ответами"""
-    with open(os.path.join(path, filename), encoding="utf-8") as file:
+    with open(f"Lab1/{filename}", encoding="utf-8") as file:
         reader = csv.reader(file, delimiter=",")
         _, _, *fieldnames = next(reader)
         return fieldnames, create_ankets(list(reader))
@@ -37,14 +34,14 @@ def create_tree(qnumber: int, persons: list) -> str | tuple:
     if not persons:
         return "Извините, я вас не знаю!"
     if len(persons) == 1:
-        return f"Вы - {persons[0][0]}"
-    yes_persons = []
-    no_persons = []
-    for person in persons:
-        if person[1][qnumber] == 1:
-            yes_persons.append(person)
+        return f"Вы - {list(persons.keys())[0]}"
+    yes_persons = {}
+    no_persons = {}
+    for person, answers in persons.items():
+        if answers[qnumber] == 1:
+            yes_persons[person] = answers
         else:
-            no_persons.append(person)
+            no_persons[person] = answers
     return create_tree(qnumber + 1, no_persons), create_tree(qnumber + 1, yes_persons)
 
 
