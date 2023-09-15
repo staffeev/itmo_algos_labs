@@ -1,4 +1,4 @@
-def binary_search(a: list[int], x: int) -> int | float:
+def binary_search(a: list[float], x: float) -> int:
     iter_count = 0
     left_bound, right_bound = 0, len(a) - 1
     while left_bound <= right_bound:
@@ -10,10 +10,10 @@ def binary_search(a: list[int], x: int) -> int | float:
             left_bound = mid + 1
         else:
             right_bound = mid - 1
-    return float("inf")
+    return -1
 
 
 if __name__ == "__main__":
-    a = list(map(int, input().split()))
-    x = int(input())
+    a = list(map(float, input().split()))
+    x = float(input())
     print(binary_search(a, x))
