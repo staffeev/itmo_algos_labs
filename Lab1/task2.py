@@ -22,33 +22,34 @@ def get_questions_and_answers(filename: str) -> (list[str], list[dict[str, list[
     для создания анкет из списка, сформированного на основе файла csv'''
         return fieldnames, create_ankets(list(reader))
 
-def guessing_game(questions: list[str], tree: tuple):
-    for q in questions:
-        ans = input(f"{q}: ")
-        int_ans = 1 if ans.lower().capitalize() in ("Да", "Yes", "Y") else 0
-        tree = tree[int_ans]
-        if isinstance(tree, str):
-            print(tree)
-            return
-        
-
 def create_tree(qnumber: int, persons: list) -> str | tuple:
     """Рекурсивная функция, создающая бинарное дерево"""
-    if not persons:
-        return "Извините, я вас не знаю!"
+    if not persons: #==если пусто
+        return "Извините, я вас не знаю!" + '\n' + 'game over.'
     if len(persons) == 1:
-        return f"Вы - {list(persons.keys())[0]}"
+        return f"Вы - {list(persons.keys())[0]}" + '\n' + 'game over.'
     yes_persons = {}
     no_persons = {}
-    for person, answers in persons.items():
+    for person, answers in persons.items(): #поочередно берем Person и помещаем его в один из словарей в зависимости от ответа на текущий вопрос
         if answers[qnumber] == 1:
             yes_persons[person] = answers
         else:
             no_persons[person] = answers
     return create_tree(qnumber + 1, no_persons), create_tree(qnumber + 1, yes_persons)
 
+def guessing_game(questions: list[str], tree: tuple):
+    for q in questions: #пробегаемся по вопросам
+        ans = input(f"{q}: ") #выводим текущий вопрос в консоль(?) для пользователя и получаем ответ
+        '''с помощью тернарного оператора преобразуем ответ в 1 - да либо 0 - нет'''
+        int_ans = 1 if ans.lower().capitalize() in ("Да", "Yes", "Y") else 0
+        tree = tree[int_ans]
+        if isinstance(tree, str): #относится ли tree к классу str
+            print(tree) #если да, то игра заканчивается, если нет, то игра продолжается (и эта строчка не отрабатывает)
+            return
+        
 
 if __name__ == "__main__":
+    print('the game starts...')
     fields, persons = get_questions_and_answers("opros.csv")
     tree = create_tree(0, persons)
     guessing_game(fields, tree)
