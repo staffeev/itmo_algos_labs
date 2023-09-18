@@ -25,9 +25,9 @@ def get_questions_and_answers(filename: str) -> (list[str], list[dict[str, list[
 def create_tree(qnumber: int, persons: list) -> str | tuple:
     """Рекурсивная функция, создающая бинарное дерево"""
     if not persons: #==если пусто
-        return "Извините, я вас не знаю!" + '\n' + 'game over.'
+        return "Извините, я вас не знаю!" + '\n'*2 + 'game over.'
     if len(persons) == 1:
-        return f"Вы - {list(persons.keys())[0]}" + '\n' + 'game over.'
+        return f"Вы - {list(persons.keys())[0]}" + '\n'*2 + 'game over.'
     yes_persons = {}
     no_persons = {}
     for person, answers in persons.items(): #поочередно берем Person и помещаем его в один из словарей в зависимости от ответа на текущий вопрос
@@ -49,7 +49,7 @@ def guessing_game(questions: list[str], tree: tuple):
         
 
 if __name__ == "__main__":
-    print('the game starts...')
+    print('the game starts...' + '\n')
     fields, persons = get_questions_and_answers("opros.csv")
     tree = create_tree(0, persons)
     guessing_game(fields, tree)
