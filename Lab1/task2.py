@@ -7,7 +7,7 @@ def create_ankets(data) -> list[tuple[str, list[int]]]:
     ankets = {}
     for i in data: #пробегаемся по строкам data
         _, person, *answers = i #помещаем в i fio и ответы человека
-    '''добавляем в список ankets fio человека и его ответы в формате 1/0'''
+        '''добавляем в список ankets fio человека и его ответы в формате 1/0'''
         ankets[person] = [1 if x == "Да" else 0 for x in answers]
     return ankets
 
@@ -17,7 +17,7 @@ def get_questions_and_answers(filename: str) -> (list[str], list[tuple[str, list
     with open(f"Lab1/{filename}", encoding="utf-8") as file:
         reader = csv.reader(file, delimiter=",")
         _, _, *fieldnames = next(reader) #сохраняем первую строчку (вопросы)
-    '''#возвращаем fieldnames (вопросы) и вызываем функцию create_ankets 
+        '''#возвращаем fieldnames (вопросы) и вызываем функцию create_ankets 
     для создания анкет из списка, сформированного на основе файла csv'''
         return fieldnames, create_ankets(list(reader))
 
