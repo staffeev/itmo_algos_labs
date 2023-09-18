@@ -1,9 +1,10 @@
-import csv
-    
+import csv #для чтения гугл-дока
+import os #для корректного нахождения пути до файла
 
-def create_ankets(data) -> list[tuple[str, list[int]]]:
+path = os.path.realpath(os.path.dirname(__file__)) #real_path заменяет символическую ссылку на каноничную
+
+def create_ankets(data) -> dict[str, list[int]]:
     """Возвращает анкеты"""
-    ankets = []
     ankets = {}
     for i in data: #пробегаемся по строкам data
         _, person, *answers = i #помещаем в i fio и ответы человека
@@ -12,9 +13,9 @@ def create_ankets(data) -> list[tuple[str, list[int]]]:
     return ankets
 
 
-def get_questions_and_answers(filename: str) -> (list[str], list[tuple[str, list[int]]]):
+def get_questions_and_answers(filename: str) -> (list[str], list[dict[str, list[int]]]):
     """Получение данных из csv-таблицы с ответами"""
-    with open(f"Lab1/{filename}", encoding="utf-8") as file:
+    with open(os.path.join(path, filename), encoding="utf-8") as file:
         reader = csv.reader(file, delimiter=",")
         _, _, *fieldnames = next(reader) #сохраняем первую строчку (вопросы)
         '''#возвращаем fieldnames (вопросы) и вызываем функцию create_ankets 
