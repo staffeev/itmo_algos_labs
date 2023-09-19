@@ -7,7 +7,7 @@ def create_ankets(data) -> dict[str, list[int]]:
     """Возвращает анкеты"""
     ankets = {}
     for i in data: #пробегаемся по строкам data
-        _, person, *answers = i #помещаем в i fio и ответы человека
+        _, person, *answers = i #помещаем в переменные fio и ответы человека из i
         '''добавляем в список ankets fio человека и его ответы в формате 1/0'''
         ankets[person] = [1 if x == "Да" else 0 for x in answers]
     return ankets
@@ -22,7 +22,7 @@ def get_questions_and_answers(filename: str) -> (list[str], list[dict[str, list[
     для создания анкет из списка, сформированного на основе файла csv'''
         return fieldnames, create_ankets(list(reader))
 
-def create_tree(qnumber: int, persons: list) -> str | tuple:
+def create_tree(qnumber: int, persons: dict) -> str | tuple:
     """Рекурсивная функция, создающая бинарное дерево"""
     if not persons: #==если пусто
         return "Извините, я вас не знаю!" + '\n'*2 + 'game over.'
