@@ -11,7 +11,6 @@ if __name__ == "__main__":
     f = []
     for i in range(x):
         f.append(list(map(int, input().split())))
-    print(f)
     visited = [False] * x
     countries = []
     country = []
