@@ -79,6 +79,12 @@ def o_n_logn():
     return closest_num
 
 
+def o_3n():
+    """"""
+    n = int(input())
+
+
+
 if __name__ == "__main__":
     # print(o_n_cube())
     # print(o_n_fact())
