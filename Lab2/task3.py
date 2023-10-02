@@ -80,12 +80,41 @@ def o_n_logn():
 
 
 def o_3n():
-    """"""
-    n = int(input())
+    """Дан массив a челых чисел длины n. Какова длина наибольшего общего префикса
+    массива префиксных сумм исходного массива и массива префиксных сумм 
+    развернутого исходного массива, если префиксы этих двух массиво могут 
+    отличаться не более чем в 3 позициях?"""
 
+    n = int(input())
+    a = list(map(int, input().split()))
+    pref = [0] * n
+    pref[0] = a[0]
+    for i in range(1, n):
+        pref[i] = pref[i - 1] + a[i]
+    suf = [0] * n
+    suf[0] = a[-1]
+    for i in range(1, n):
+        suf[i] = suf[i - 1] + a[n - i - 1]
+    
+    count = 0
+    num_of_mistakes = 3
+    for i, j in zip(pref, suf):
+        if i == j:
+            count += 1
+        elif num_of_mistakes > 0:
+            count += 1
+            num_of_mistakes -= 1
+        else:
+            break
+
+    print(pref)
+    print(suf)
+
+    return count
 
 
 if __name__ == "__main__":
     # print(o_n_cube())
     # print(o_n_fact())
-    print(o_n_logn())
+    # print(o_n_logn())
+    print(o_3n())
