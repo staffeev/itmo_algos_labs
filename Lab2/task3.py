@@ -53,7 +53,7 @@ def o_n_fact() -> int:
     return count
 
 
-def o_n_logn():
+def o_n_logn() -> int:
     """Пусть бинарное число s задается с помощью массива bounds = [x1, ..., xn], 
     где xi = 1 если xi >= k иначе 0; k - параметр. Найти ближайшее к числу p число, 
     получамое с помощью такого массива"""
@@ -79,10 +79,10 @@ def o_n_logn():
     return closest_num
 
 
-def o_3n():
-    """Дан массив a челых чисел длины n. Какова длина наибольшего общего префикса
+def o_3n() -> int:
+    """Дан массив a целых чисел длины n. Какова длина наибольшего общего префикса
     массива префиксных сумм исходного массива и массива префиксных сумм 
-    развернутого исходного массива, если префиксы этих двух массиво могут 
+    развернутого исходного массива, если префиксы этих двух массивов могут 
     отличаться не более чем в 3 позициях?"""
 
     n = int(input())
@@ -113,8 +113,39 @@ def o_3n():
     return count
 
 
+def _sign(n):
+    return 1 if n > 0 else -1 if n < 0 else 0
+
+
+def _find(s: list[int], n: int):
+    left, right = 0, n - 1
+    flag = False
+    while left  + 1 < right:
+        mid = (left + right) // 2
+        if _sign(s[left]) != _sign(s[mid]):
+            flag = True
+            right = mid
+        else:
+            left = mid
+    if not flag:
+        return -1
+    return min(mid - 1, mid, mid + 1, key=lambda x: abs(s[x]))
+
+
+def o_3logn() -> int:
+    """Пусть даны три дискретные монотонные функции. 
+    Найти для каждой такой x, что f(x) наиболее близка к корню функции"""
+    n = int(input())
+    
+    f = list(map(float, input().split()))
+    g = list(map(float, input().split()))
+    h = list(map(float, input().split()))
+    return _find(f, n), _find(g, n), _find(h, n)
+
+
 if __name__ == "__main__":
     # print(o_n_cube())
     # print(o_n_fact())
     # print(o_n_logn())
-    print(o_3n())
+    # print(o_3n())
+    print(o_3logn())
