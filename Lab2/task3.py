@@ -10,45 +10,36 @@ def o_n_cube() -> int:
     (p1, p2) и (p2, p3) соответственно (где 1-я точка - начало вектора, 2-я - конец)
     является вектором, образующим тупой угол с положительным направлением оси Ox?"""
 
-    from math import atan2, degrees
     n = int(input())
     points = []
     for _ in range(n):
         x, y = map(int, input().split())
         points.append((x, y))
     count = 0
+
     for x in range(n):
         for y in range(n):
             for z in range(n):
                 vec1 = _make_vector(points[x], points[y])
                 vec2 = _make_vector(points[y], points[z])
                 vec3 = (vec1[0] + vec2[0], vec1[1] + vec2[1])
-                if 90 < degrees(atan2(vec3[1], vec3[0])) < 180:
+                if vec3[0] < 0 and vec3[1] > 0:
                     count += 1
     return count
 
 
 def o_n_fact() -> int:
-    """Сколько существует перестановок длины n таких, что XOR первого и последнего элемента
-    больше XOR остальных элементов?"""
+    """Сколько существует перестановок длины n таких, что сумма первого и 
+    последнего элемента делит сумму оставшихся?"""
 
     from itertools import permutations
     n = int(input())
     count = 0
     p = list(permutations(range(1, n + 1)))
 
-    if n % 4 == 0:
-        s = n
-    elif n % 4 == 1:
-        s = 1
-    elif n % 4 == 2:
-        s = n + 1
-    elif n % 4 == 3:
-        s = 0
-
+    s = n * (1 + n) // 2
     for i in p:
-        v = i[0] ^ i[-1]
-        if v > s ^ v:
+        if (s - i[0] - i[-1]) % (i[0] + i[-1]) == 0:
             count += 1
     return count
 
@@ -63,6 +54,10 @@ def o_n_logn() -> int:
     left, right = 0, n - 1
     min_abs = 10**12
     closest_num = None
+
+    for i in sorted_bounds:
+        bin_number = [1 if x >= i else 0 for x in bounds]
+        value = int("".join(map(str, bin_number)), 2)
     
     while left <= right:
         mid = (left + right) // 2
@@ -107,9 +102,6 @@ def o_3n() -> int:
         else:
             break
 
-    print(pref)
-    print(suf)
-
     return count
 
 
@@ -145,7 +137,7 @@ def o_3logn() -> int:
 
 if __name__ == "__main__":
     # print(o_n_cube())
-    # print(o_n_fact())
-    # print(o_n_logn())
+    #print(o_n_fact())
+    #print(o_n_logn())
     # print(o_3n())
     print(o_3logn())
