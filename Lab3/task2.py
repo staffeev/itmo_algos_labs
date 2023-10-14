@@ -35,9 +35,39 @@ def merge(a: list[int], start: int, end: int, mid: int):
         p2 += 1
 
 
+def bucket_sort(a: list[float]):
+    min_, max_ = float("inf"), float("-inf")
+    for el in a:
+        min_ = min(el, min_)
+        max_ = max(el, max_)
+
+    range_ = max_ - min_
+
+    buckets = [[] for _ in range(len(a))]
+
+    for element in a:
+        index = min(int(element * len(a) / range_), len(a) - 1)
+        buckets[index].append(element)
+    
+
+    print(buckets)
+
+    for i in range(len(buckets)):
+        buckets[i] = sorted(buckets[i])
+
+    result = []
+    [result.extend(bucket) for bucket in buckets]
+    return result
+
+    
+
 if __name__ == "__main__":
-    # merge sort
+    # # merge sort (example 2 4 1 6 8 3 5 7)
+    # a = list(map(int, input("Введите числа массива через пробел: ").split()))
+    # merge_sort(a, 0, len(a) - 1)
+    # print("Отсортированный массив:", a)
+
+    #bucket sort (exampple 21 1 88 2 3 89 23 24 86)
     a = list(map(int, input("Введите числа массива через пробел: ").split()))
-    merge_sort(a, 0, len(a) - 1)
-    print("Отсортированный массив:", a)
+    print("Отсортированный массив:", bucket_sort(a))
 
