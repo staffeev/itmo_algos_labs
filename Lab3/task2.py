@@ -78,7 +78,7 @@ def heap_sort(a: list[float]):
         make_heap(a, len(a), i)
     
     for i in range(len(a) - 1, -1, -1):
-        a[i], a[0] = a[0], a[i]
+        a[0], a[i] = a[i], a[0]
         make_heap(a, i, 0)
         print(a)
 
