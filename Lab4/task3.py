@@ -12,7 +12,7 @@ class Board:
         self.field = []  # 0, 1 и x
     
     def set_field(self):
-        self.field = [list(map(int, input().split())) for _ in range(n)]
+        self.field = [list(map(int, input().split())) for _ in range(self.height)]
     
     def set_path(self, points: list[tuple[int]]):
         for point in points:
