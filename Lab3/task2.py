@@ -70,7 +70,6 @@ def make_heap(a: list[float], key, ix):
     make_heap(a, key, max_)
 
 
-
 def heap_sort(a: list[float]):
     "Пирамидальная сортировка"
 
