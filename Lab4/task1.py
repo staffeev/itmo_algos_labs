@@ -1,5 +1,4 @@
 import random
-import string
 from queue import LifoQueue
 def create_sequence(length):
     sample_string = '(){}[]'
