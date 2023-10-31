@@ -14,16 +14,16 @@ def is_psp(sequence:str):
             stack.put([i, bracket])
         elif bracket in list(brackets_tuple.keys()):
             if not stack.qsize():
-                return (f'скобочная последовательность неправильная, индекс первой неправильной скобки:{i}')
+                return (f'сп неправильная, индекс первой неправильной скобки:{i}')
             else:
-                last_index, last = stack.get()
+                _, last = stack.get()
                 if last != brackets_tuple[bracket]:
-                    return (f'скобочная последовательность неправильная, индекс первой неправильной скобки:{last_index}')
+                    return (f'сп неправильная, индекс первой неправильной скобки:{i}')
     if stack.qsize():
         while stack.qsize():
             last_index, last = stack.get()
-        return (f'скобочная последовательность неправильная, индекс первой неправильной скобки:{last_index}')
-    return "скобочная последовательность правильная"
+        return (f'сп неправильная, индекс первой неправильной скобки:{last_index}')
+    return "сп правильная"
 
 
 
