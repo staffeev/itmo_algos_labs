@@ -28,8 +28,9 @@ def knapsack_dynamic_programming(stuff, capacity):
 
 if __name__ == '__main__':
     N, M, K = map(int, input().split())
-    """stuff = [(random.randint(1, 30), random.randint(1, 30)) for _ in range(N)]"""
-    stuff = [(1, 2), (2, 1), (1, 4), (2, 10), (1, 14), (6, 10), (3, 8)]
+    # stuff = [(random.randint(1, 30), random.randint(1, 30)) for _ in range(N)]
+    stuff = [tuple(map(int, input().split())) for _ in range(N)]
+    # stuff = [(1, 2), (2, 1), (1, 4), (2, 10), (1, 14), (6, 10), (3, 8)]
     print(stuff)
     general_stolen_stuff = []
     for _ in range(M):
