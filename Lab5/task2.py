@@ -96,3 +96,5 @@ if __name__ == "__main__":
     for i in res:
         print(i)
     print("Количество операций при умножении в оптимальном порядке:", sc.green(num_of_operations))
+    print("Порядок умножения:")
+    print(get_order(tree))
