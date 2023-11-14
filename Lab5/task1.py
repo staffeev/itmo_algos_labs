@@ -1,7 +1,7 @@
 import random
 import copy
 
-def knapsack_dynamic_programming(stuff, capacity):
+def knapsack(stuff, capacity):
     n = len(stuff)
     dp = [[0] * (capacity + 1) for _ in range(n + 1)]
 
@@ -37,7 +37,7 @@ if __name__ == '__main__':
         if len(stuff) == 0:
             break
 
-        stolen_stuff = knapsack_dynamic_programming(stuff, K)
+        stolen_stuff = knapsack(stuff, K)
         general_stolen_stuff.append(stolen_stuff)
 
         # Удаляем вещи, которые унесли
