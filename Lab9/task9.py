@@ -59,7 +59,7 @@ def convert_graph_to_nx_form(g: dict) -> dict:
 def draw_nx_graph(g: dict, edges_to_colorize: list=[], directed=False):
     """Рисование графа"""
     graph = nx.from_dict_of_dicts(convert_graph_to_nx_form(g), create_using=nx.Graph if not directed else nx.DiGraph)
-    pos = nx.planar_layout(graph)
+    pos = nx.spring_layout(graph)
     nx.draw_networkx_nodes(graph, pos)
     nx.draw_networkx_labels(graph, pos)
     nx.draw_networkx_edges(graph, pos, [i for i in graph.edges if i not in edges_to_colorize])
