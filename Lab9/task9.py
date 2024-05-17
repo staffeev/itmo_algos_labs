@@ -32,7 +32,7 @@ def find_shortest_path(start_vertex: int, end_vertex: int, num_of_vertexes: int,
     return distances[end_vertex], path[::-1]
 
 
-def create_graph_for_input(directed=False) -> dict[int, list[dict]]:
+def create_graph_from_input(directed=False) -> dict[int, list[dict]]:
     """Ввод графа поьзователем"""
     g = dict()
     vertexes = set()
@@ -52,32 +52,41 @@ def convert_graph_to_nx_form(g: dict) -> dict:
     g2 = dict()
     for u in g:
         for v, w in g[u].items():
-            g2[u] = {v: {"weight": w}}
+            g2[u] = g2.get(u, {}) | {v: {"weight": w}}
     return g2
 
 
-def draw_nx_graph(g: dict, edges_to_colorize: list, directed=False):
+def draw_nx_graph(g: dict, edges_to_colorize: list=[], directed=False):
     graph = nx.from_dict_of_dicts(convert_graph_to_nx_form(g), create_using=nx.Graph if not directed else nx.DiGraph)
-    pos = nx.spring_layout(graph)
+    pos = nx.planar_layout(graph)
     nx.draw_networkx_nodes(graph, pos)
     nx.draw_networkx_labels(graph, pos)
-    nx.draw_networkx_edges(graph, pos, edges_to_colorize, edge_color="red")
     nx.draw_networkx_edges(graph, pos, [i for i in graph.edges if i not in edges_to_colorize])
+    nx.draw_networkx_edges(graph, pos, edges_to_colorize, edge_color="red")
     nx.draw_networkx_edge_labels(graph, pos, edge_labels=nx.get_edge_attributes(graph, "weight"))
     plt.show()
 
 
 
 if __name__ == "__main__":
-    # n, m, g = create_graph_for_input()
-    # n, m, g = 4, 3, {1: {2: 5}, 2: {1: 5, 3: 10}, 3: {2: 10, 4: 1}, 4: {3: 1}}
-    # print(g)
-    # path_len, path = find_shortest_path(1, 4, n, m, g)
-    # get_nx_graph(g)
-
-    n, m, g = 4, 3, {1: {2: 5}, 2: {3: 10}, 3: {4: 1}, 4: {3: 1}}
-    print(g)
-    path_len, path = find_shortest_path(1, 4, n, m, g)
+    # Неорграф
+    n, m, g = 9, 6, {1: {2: 7, 3: 9, 6: 14}, 2: {1: 7, 3: 10, 4: 15}, 3: {1: 9, 2: 10, 6: 2, 4: 11}, 6: {1: 14, 3: 2, 5: 9}, 4: {2: 15, 3: 11, 5: 6}, 5: {6: 9, 4: 6}}
+    path_len, path = find_shortest_path(1, 5, n, m, g)
     print(f"Длина кратчайшего пути равна {path_len}. Путь:", "->".join(map(str, path)))
-    draw_nx_graph(g, [(path[i - 1], path[i]) for i in range(1, len(path))], True)
+    draw_nx_graph(g , [(path[i - 1], path[i]) for i in range(1, len(path))])
 
+    # Орграф
+    n, m, g = 6, 9, {2: {1: 1, 5: 7, 4: 2}, 1: {3: 4}, 3: {2: -2, 4: 3}, 4: {5: 4}, 5: {6: 7}, 6: {4: -3}}
+    path_len, path = find_shortest_path(1, 6, n, m, g)
+    print(f"Длина кратчайшего пути равна {path_len}. Путь:", "->".join(map(str, path)))
+    draw_nx_graph(g , [(path[i - 1], path[i]) for i in range(1, len(path))], True)
+
+    # Цикл отрицательной длины
+    n, m, g = 6, 9, {2: {1: 1, 3: -2, 5: 7, 4: 2}, 1: {2: 1, 3: 4}, 3: {1: 4, 2: -2, 4: 3}, 5: {2: 7, 4: 4, 6: 7}, 4: {2: 2, 3: 3, 5: 4, 6: -3}, 6: {5: 7, 4: -3}}
+    try:
+        path_len, path = find_shortest_path(1, 6, n, m, g)
+        print(f"Длина кратчайшего пути равна {path_len}. Путь:", "->".join(map(str, path)))
+        draw_nx_graph(g , [(path[i - 1], path[i]) for i in range(1, len(path))])
+    except ValueError:
+        print("В графе обнаружен цикл отрицательной длины")
+        draw_nx_graph(g)
