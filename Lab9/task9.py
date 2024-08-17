@@ -71,16 +71,16 @@ def draw_nx_graph(g: dict, edges_to_colorize: list=[], directed=False):
 
 if __name__ == "__main__":
     # Неорграф
-    n, m, g = 9, 6, {1: {2: 7, 3: 9, 6: 14}, 2: {1: 7, 3: 10, 4: 15}, 3: {1: 9, 2: 10, 6: 2, 4: 11}, 6: {1: 14, 3: 2, 5: 9}, 4: {2: 15, 3: 11, 5: 6}, 5: {6: 9, 4: 6}}
-    path_len, path = find_shortest_path(1, 5, n, m, g)
-    print(f"Длина кратчайшего пути равна {path_len}. Путь:", "->".join(map(str, path)))
-    draw_nx_graph(g , [(path[i - 1], path[i]) for i in range(1, len(path))])
+    # n, m, g = 9, 6, {1: {2: 7, 3: 9, 6: 14}, 2: {1: 7, 3: 10, 4: 15}, 3: {1: 9, 2: 10, 6: 2, 4: 11}, 6: {1: 14, 3: 2, 5: 9}, 4: {2: 15, 3: 11, 5: 6}, 5: {6: 9, 4: 6}}
+    # path_len, path = find_shortest_path(1, 5, n, m, g)
+    # print(f"Длина кратчайшего пути равна {path_len}. Путь:", "->".join(map(str, path)))
+    # draw_nx_graph(g , [(path[i - 1], path[i]) for i in range(1, len(path))])
 
     # Орграф
-    n, m, g = 6, 9, {2: {1: 1, 5: 7, 4: 2}, 1: {3: 4}, 3: {2: -2, 4: 3}, 4: {5: 4}, 5: {6: 7}, 6: {4: -3}}
-    path_len, path = find_shortest_path(1, 6, n, m, g)
-    print(f"Длина кратчайшего пути равна {path_len}. Путь:", "->".join(map(str, path)))
-    draw_nx_graph(g , [(path[i - 1], path[i]) for i in range(1, len(path))], True)
+    # n, m, g = 6, 9, {2: {1: 1, 5: 7, 4: 2}, 1: {3: 4}, 3: {2: -2, 4: 3}, 4: {5: 4}, 5: {6: 7}, 6: {4: -3}}
+    # path_len, path = find_shortest_path(1, 6, n, m, g)
+    # print(f"Длина кратчайшего пути равна {path_len}. Путь:", "->".join(map(str, path)))
+    # draw_nx_graph(g , [(path[i - 1], path[i]) for i in range(1, len(path))], True)
 
     # Цикл отрицательной длины
     n, m, g = 6, 9, {2: {1: 1, 3: -2, 5: 7, 4: 2}, 1: {2: 1, 3: 4}, 3: {1: 4, 2: -2, 4: 3}, 5: {2: 7, 4: 4, 6: 7}, 4: {2: 2, 3: 3, 5: 4, 6: -3}, 6: {5: 7, 4: -3}}

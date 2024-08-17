@@ -1,5 +1,5 @@
 import random as rnd
-
+import timeit
 
 def merge_sort(a: list[float], left, right):
     """Сортировка слиянием"""
@@ -50,6 +50,8 @@ def insertion_sort(a, left, right):
 
 def hybrid_sort(in_data, threshold=40):
     n = len(in_data)
+    if n < threshold:
+        insertion_sort(in_data, 0, n)
     for start in range(0, n, threshold):
         end = min(start + threshold - 1, n - 1)
         insertion_sort(in_data, start, end + 1)
@@ -108,11 +110,33 @@ def heap_sort(a: list[float]):
         make_heap(a, i, 0)
 
 
+def make_test(n, rev=0):
+    print(f"Размер массива - {n}")
+    array = [rnd.randint(-500, 500) for _ in range(n)]
+    if rev == 1:
+        array.sort()
+    elif rev == -1:
+        array.sort(reverse=True)
+        
+    hybr = round((timeit.timeit(lambda: hybrid_sort(array), number=1)), 5)
+    print(f"Гибридная сортировка выполнилась за {hybr} с")
+
+    quick = round((timeit.timeit(lambda: quicksort(array), number=1)), 5)
+    print(f"Быстрая сортировка выполнилась за {quick} с")
+
+    heap = round((timeit.timeit(lambda: heap_sort(array), number=1)), 5)
+    print(f"Пирамидальная сортировка выполнилась за {heap} с")
+
+    mg = round((timeit.timeit(lambda: merge_sort(array, 0, n), number=1)), 5)
+    print(f"Сортировка слиянием выполнилась за {mg} с")
+
+    ins = round((timeit.timeit(lambda: insertion_sort(array, 0, n), number=1)), 5)
+    print(f"Сортировка вставками выполнилась за {ins} с")
+
+    d = {round(hybr, 5): "гибридная", round(quick, 5): "быстрая", "пирамидальная": round(heap, 5), 
+         "слиянием": round(mg, 5), "вставками": round(ins, 5)}
+    print(f"Самой быстрой оказалась сортировка - {d[round(min([hybr, quick, heap, mg, ins]), 5)]}")
+
+
 if __name__ == "__main__":
-    a = [rnd.randint(-100, 100) for _ in range(500)]
-    b = hybrid_sort(a)
-    print(all(b[i] >= b[i - 1] for i in range(1, len(b))))
-    print(b)
-    # a = [5, 1, 19,4, 0, -5, 3, 44, 2]
-    # insertion_sort(a, 0, 4)
-    # print(a)
+   make_test(1000, -1)
